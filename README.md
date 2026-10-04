@@ -5,7 +5,7 @@
 A forecasting → optimization → risk pipeline built on public data:
 EIA-930 hourly demand for PJM's Dominion subregion, ERA5 weather, and PJM's capacity-market and load-forecast parameters.
 
-[**▶ Live demo**](#) &nbsp;·&nbsp; [Decision memo](docs/decision_memo.md) &nbsp;·&nbsp; [Assumptions](config/assumptions.yaml)
+[**▶ Live demo**](https://grid-under-pressure-ahmedomansour.streamlit.app) &nbsp;·&nbsp; [Decision memo](docs/decision_memo.md) &nbsp;·&nbsp; [Assumptions](config/assumptions.yaml)
 
 > **Headline.** Under PJM's 2026 growth outlook (4.7%/yr), Dominion's weather-normal peak climbs from **25.8 GW (2025) to 32.4 GW by 2030**. Meeting PJM's planning requirement takes **3.5 GW of new capacity** (3.0 GW gas combined cycle + 0.4 GW demand response), for a total system cost of **$5.78B/yr**.
 >

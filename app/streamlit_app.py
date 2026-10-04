@@ -81,15 +81,28 @@ with st.spinner("Solving LP and running Monte Carlo…"):
 new_total = sum(sol["new_capacity_mw"].values())
 saving = (gas_only["annual_cost_musd"] - sol["annual_cost_musd"]) / gas_only["annual_cost_musd"] * 100
 c = st.columns(5)
-c[0].metric(f"{cfg['study']['target_year']} peak (weather-normal)", f"{summ['peak_median_mw']/1000:.1f} GW",
-            f"+{summ['increment_mw']/1000:.1f} GW vs base year", delta_color="off")
-c[1].metric("New capacity needed", f"{new_total/1000:.1f} GW")
-c[2].metric("Annual system cost", f"${sol['annual_cost_musd']/1000:.2f}B",
-            f"{saving:.1f}% vs gas-only", delta_color="normal" if saving >= 0 else "inverse")
-c[3].metric("Loss-of-load expectation", f"{rel['lole_days_per_yr']:.3f} d/yr",
-            "meets 0.1 standard" if rel["meets_target"] else "misses 0.1 standard",
-            delta_color="normal" if rel["meets_target"] else "inverse")
-c[4].metric("CO₂", f"{sol['co2_mt']:.1f} Mt/yr", f"{sol['co2_t_per_mwh']:.2f} t/MWh", delta_color="off")
+
+
+def metric(col, label, value, delta=None, color="off", arrow="off", help=None):
+    """st.metric without misleading arrows; falls back on older Streamlit (no delta_arrow)."""
+    try:
+        col.metric(label, value, delta, delta_color=color, delta_arrow=arrow, help=help)
+    except TypeError:
+        col.metric(label, value, delta, delta_color=color, help=help)
+
+
+metric(c[0], f"{cfg['study']['target_year']} peak (weather-normal)", f"{summ['peak_median_mw']/1000:.1f} GW",
+       f"+{summ['increment_mw']/1000:.1f} GW vs base year")
+metric(c[1], "New capacity needed", f"{new_total/1000:.1f} GW",
+       f"accredited req. {sol['accredited_requirement_mw']/1000:.1f} GW")
+metric(c[2], "Annual system cost", f"${sol['annual_cost_musd']/1000:.2f}B",
+       f"{abs(saving):.1f}% {'below' if saving >= 0 else 'above'} gas-only",
+       help="Total annualized cost: new-build capital, fuel, O&M, imports, carbon and unserved energy.")
+metric(c[3], "Loss-of-load expectation", f"{rel['lole_days_per_yr']:.3f} d/yr",
+       "meets 0.1 standard" if rel["meets_target"] else "misses 0.1 standard",
+       color="normal" if rel["meets_target"] else "inverse",
+       help="Average days per year with any unserved load across the simulated years. Standard: 0.1.")
+metric(c[4], "CO₂ emissions", f"{sol['co2_mt']:.1f} Mt/yr", f"{sol['co2_t_per_mwh']:.2f} t per MWh")
 
 left, right = st.columns(2)
 with left:
@@ -107,8 +120,12 @@ with left:
 with right:
     st.subheader("Where the energy comes from")
     e = sol["energy_twh"]
+    names = {"existing_nuclear": "Existing nuclear", "existing_gas": "Existing gas",
+             "existing_coal_oil_other": "Existing coal/oil/other", "gas_cc": "New gas CC",
+             "gas_ct": "New gas CT", "solar": "Solar", "battery_discharge": "Battery",
+             "demand_response": "Demand response", "imports": "Imports", "unserved": "Unserved energy"}
     keys = [k for k in e if e[k] > 0.001]
-    fig2 = go.Figure(go.Bar(x=[e[k] for k in keys], y=[k.replace("_", " ").title() for k in keys],
+    fig2 = go.Figure(go.Bar(x=[e[k] for k in keys], y=[names.get(k, k) for k in keys],
                             orientation="h", marker_color="#2a78d6",
                             hovertemplate="%{y}: %{x:.1f} TWh<extra></extra>"))
     fig2.update_layout(height=300, xaxis_title="TWh / yr", margin=dict(l=0, r=0, t=10, b=0),
