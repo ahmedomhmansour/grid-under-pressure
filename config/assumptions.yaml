@@ -1,0 +1,154 @@
+# Grid Under Pressure — model assumptions
+# ---------------------------------------------------------------------------
+# Every number here is an input you should be able to defend in an interview.
+# Each line carries a tag:
+#   [SOURCED]  taken from the cited document (see "Sources" at the bottom)
+#   [DERIVED]  computed from sourced numbers, method stated
+#   [ESTIMATE] no single public figure; reasoned estimate, method stated
+#   [JUDGMENT] a modeling choice; test it with the app sliders
+# Checked October 2026. Re-check before publishing new results.
+# ---------------------------------------------------------------------------
+
+study:
+  base_year: 2025          # last full year of observed data used as the baseline
+  target_year: 2030        # planning year the capacity-expansion model solves for
+  history_start: "2019-01-01"
+
+data:
+  eia_parent: PJM          # EIA-930 balancing authority
+  eia_subba: DOM           # Dominion subregion within PJM
+  weather_stations:        # Open-Meteo ERA5 archive (no key); weighted average
+    richmond: {lat: 37.54, lon: -77.43, weight: 0.5}   # [JUDGMENT] Richmond load center
+    dulles:   {lat: 38.95, lon: -77.45, weight: 0.5}   # [JUDGMENT] Northern VA data-center corridor
+
+scenarios:
+  # Annual growth in the zone's weather-normal ANNUAL peak, base_year -> target_year.
+  # DOM's annual peak is now set in winter, so the winter growth rate is the anchor.
+  # [SOURCED] PJM 2026 Load Forecast Report, DOM dashboard: 10-yr growth 3.9% summer,
+  #   4.7% winter; 20-yr 5.1% summer, 5.4% winter. (Extracted by an automated PDF
+  #   reader; confirm on the DOM dashboard page before citing in an interview.)
+  # [SOURCED] Dominion's 2025 IRP Update forecasts 2.5%/yr for its own service territory.
+  low:  {peak_growth: 0.025, label: "Low (2.5%/yr, Dominion IRP)"}
+  base: {peak_growth: 0.047, label: "Base (4.7%/yr, PJM 2026 winter)"}
+  high: {peak_growth: 0.065, label: "High (6.5%/yr)"}           # [JUDGMENT] faster data-center build-out
+
+system:
+  # Reliability requirement, in accredited (UCAP) MW:
+  #   internal accredited capacity + accredited imports >= FPR x weather-normal peak
+  # [SOURCED] FPR 0.9401 for 2028/29 (PJM 2028/29 BRA report); IRM target 20%.
+  reliability_requirement_factor: 0.9401
+
+  # Existing accredited capacity inside the DOM zone, in tranches so dispatch cost
+  # and CO2 respond to gas and carbon prices.
+  # [SOURCED] 21,246 MW UCAP cleared in the DOM LDA in the 2028/29 BRA.
+  # Split: nuclear [DERIVED] North Anna 1,875 MW + Surry ~1,676 MW = 3,551 MW x 96% ELCC;
+  #        existing solar's accredited share is counted separately below;
+  #        gas vs. coal/oil/other split of the residual is an [ESTIMATE].
+  existing_fleet:
+  # `elcc` converts accredited MW back to installed MW for the Monte Carlo
+  # ([SOURCED] PJM 2028/29 class ratings: nuclear 96%, CC 78%, CT 67%, coal 85%;
+  #  gas tranche uses a CC/CT blend [ESTIMATE]).
+    nuclear:        {mw: 3410,  var_cost: 9,  co2_t_per_mwh: 0.0, elcc: 0.96}
+    gas:            {mw: 14200, heat_rate: 7.8, vom: 4, elcc: 0.74}  # CO2 from gas factor
+    coal_oil_other: {mw: 2986,  var_cost: 42, co2_t_per_mwh: 0.95, elcc: 0.80}
+  # [ESTIMATE] Virginia had 4,286 MW of solar in 2022 and added roughly 1 GW/yr since;
+  #   most is in the DOM zone. 6,500 MW x 10% ELCC = 650 MW UCAP.
+  existing_solar_mw: 6500
+
+  # [SOURCED] DOM CETL 6,441 MW (PJM 2027/28 BRA planning parameters). Used both as
+  # the hourly import limit and as the accredited import allowance.
+  import_limit_mw: 6441
+  import_capacity_credit: 1.0
+  # [ESTIMATE] import energy price tracks gas: adder + heat_rate x gas_price (~$70/MWh at $3.50)
+  import_price_adder: 43.75
+  import_heat_rate: 7.5
+  import_co2_t_per_mwh: 0.38   # [ESTIMATE] roughly PJM's average emission rate
+  voll: 10000                  # [JUDGMENT] value of lost load, $/MWh
+
+gas_co2_t_per_mmbtu: 0.0531    # [SOURCED] EPA emission factor for natural gas (53.06 kg/MMBtu)
+
+# [SOURCED] EIA Aug 2026 STEO: Henry Hub $3.31/MMBtu in 2027; [ESTIMATE] +~$0.20 delivery basis
+gas_price: 3.50
+carbon_price: 0                # [JUDGMENT] scenario lever only; slider in the app
+
+finance:
+  wacc: 0.075                  # [JUDGMENT] real-ish utility cost of capital
+
+# New-build options. Annualized fixed cost = overnight x CRF(wacc, life) + fixed O&M,
+# computed in code (gup.config.annualized_capex). Costs in 2025 dollars.
+technologies:
+  gas_cc:
+    label: "Gas combined cycle"
+    overnight_cost: 2200       # [SOURCED] GridLab (Sep 2025): recent CC projects >= $2,000/kW, $2,144-2,256/kW
+    fixed_om: 15               # [SOURCED] EIA AEO2022 Table 8.2 (~$13-15/kW-yr)
+    life_years: 30
+    heat_rate: 6.4             # [SOURCED] EIA AEO2022 Table 8.2 (6,431 Btu/kWh)
+    vom: 2.7                   # [SOURCED] EIA AEO2022 Table 8.2
+    capacity_credit: 0.78      # [SOURCED] PJM 2028/29 BRA ELCC class rating
+    forced_outage_rate: 0.05   # [JUDGMENT]
+    unit_size_mw: 500
+  gas_ct:
+    label: "Gas combustion turbine"
+    overnight_cost: 1450       # [SOURCED] GridLab (Sep 2025): CT range $920-1,969/kW; midpoint
+    fixed_om: 8                # [SOURCED] EIA AEO2022 Table 8.2 (frame CT)
+    life_years: 30
+    heat_rate: 9.9             # [SOURCED] EIA AEO2022 Table 8.2 (9,905 Btu/kWh)
+    vom: 4.7                   # [SOURCED] EIA AEO2022 Table 8.2
+    capacity_credit: 0.67      # [SOURCED] PJM 2028/29 ELCC
+    forced_outage_rate: 0.07   # [JUDGMENT]
+    unit_size_mw: 250
+  solar:
+    label: "Utility solar (tracking)"
+    overnight_cost: 1550       # [DERIVED] EIA AEO2022 $1,327/kW (2021$) inflated ~17% to 2025$
+    fixed_om: 18               # [DERIVED] EIA AEO2022 $15.97/kW-yr, inflated
+    life_years: 30
+    vom: 0
+    capacity_credit: 0.10      # [SOURCED] PJM 2028/29 ELCC, tracking solar
+    # no federal tax credits are modeled
+  battery_4h:
+    label: "Battery (4-hour)"
+    overnight_cost: 1540       # [DERIVED] EIA AEO2022 $1,316/kW (2021$) inflated; recent costs may be lower
+    fixed_om: 30               # [DERIVED] EIA AEO2022 $25.96/kW-yr, inflated
+    life_years: 15
+    vom: 1
+    duration_h: 4
+    round_trip_eff: 0.86       # [JUDGMENT] typical lithium-ion AC round trip
+    capacity_credit: 0.59      # [SOURCED] PJM 2028/29 ELCC, 4-hr storage
+  demand_response:
+    label: "Demand response"
+    annualized_fixed: 60       # [ESTIMATE] $/kW-yr program payment
+    vom: 500                   # [ESTIMATE] $/MWh curtailment cost
+    max_mw: 2500               # [JUDGMENT] cap on additional enrollable DR in the zone
+    capacity_credit: 0.91      # [SOURCED] PJM 2028/29 ELCC, demand resource
+
+reliability:
+  draws: 1000                  # Monte Carlo years
+  load_forecast_sigma: 0.03    # [JUDGMENT] 1-sigma error on the annual load level
+  existing_unit_size_mw: 500   # [JUDGMENT] existing fleet modeled as identical units
+  existing_forced_outage_rate: 0.06   # [JUDGMENT]
+  import_availability: 0.90    # [JUDGMENT] share of CETL deliverable when DOM is short
+                               # (CETL is already an emergency-condition limit)
+  # Correlated cold-weather failures (frozen equipment, gas supply). [DERIVED] PJM's
+  # Winter Storm Elliott analysis reported ~46 GW of forced outages (~24% of the
+  # fleet) at single-digit temperatures, vs ~6-7% normally: roughly +1 percentage
+  # point of extra outage per °F below 20°F.
+  cold_weather:
+    threshold_f: 20
+    extra_outage_per_degf: 0.01
+    max_extra_outage: 0.20
+  lole_target_days: 0.1        # [SOURCED] PJM's 1-day-in-10-years LOLE standard
+
+optimization:
+  rep_days: 16                 # representative days (k-means on daily load+solar shape)
+  seed: 7
+
+# Sources
+# - PJM, 2028/2029 Base Residual Auction Report (July 14, 2026): FPR, IRM target, DOM cleared UCAP
+# - PJM, ELCC Class Ratings for the 2028/2029 BRA
+# - PJM, 2027/2028 BRA Planning Period Parameters: DOM CETL 6,441 MW
+# - PJM, 2026 Load Forecast Report (Jan 2026): DOM growth rates
+# - Dominion Energy Virginia, 2025 Integrated Resource Plan Update: 2.5%/yr service-territory growth
+# - EIA, AEO2022 Table 8.2 Cost and Performance Characteristics of New Generating Technologies
+# - GridLab, "The New Reality of Power Generation" (Sep 2025): gas plant capital costs
+# - EIA, Short-Term Energy Outlook (Aug 2026): Henry Hub forecast
+# - EPA, GHG emission factors hub: natural gas 53.06 kg CO2/MMBtu

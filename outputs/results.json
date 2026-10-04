@@ -1,0 +1,503 @@
+{
+  "demo_data": false,
+  "study": {
+    "base_year": 2025,
+    "target_year": 2030,
+    "history_start": "2019-01-01"
+  },
+  "ensemble": {
+    "base_level_mw": 15403.5,
+    "weather_years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ]
+  },
+  "backtest": [
+    {
+      "test_year": 2024,
+      "gbm": {
+        "mape_pct": 3.17,
+        "daily_peak_mape_pct": 3.04,
+        "annual_peak_error_pct": 3.76
+      },
+      "linear_benchmark": {
+        "mape_pct": 6.38,
+        "daily_peak_mape_pct": 4.86,
+        "annual_peak_error_pct": -0.15
+      }
+    },
+    {
+      "test_year": 2025,
+      "gbm": {
+        "mape_pct": 2.98,
+        "daily_peak_mape_pct": 3.23,
+        "annual_peak_error_pct": -0.01
+      },
+      "linear_benchmark": {
+        "mape_pct": 6.31,
+        "daily_peak_mape_pct": 5.61,
+        "annual_peak_error_pct": 2.24
+      }
+    }
+  ],
+  "history": [
+    {
+      "year": 2019,
+      "summer_peak_mw": 19478.0,
+      "winter_peak_mw": 17468.0,
+      "annual_peak_mw": 19803.0
+    },
+    {
+      "year": 2020,
+      "summer_peak_mw": 20073.0,
+      "winter_peak_mw": 17985.0,
+      "annual_peak_mw": 20073.0
+    },
+    {
+      "year": 2021,
+      "summer_peak_mw": 20493.0,
+      "winter_peak_mw": 20345.0,
+      "annual_peak_mw": 20493.0
+    },
+    {
+      "year": 2022,
+      "summer_peak_mw": 21274.0,
+      "winter_peak_mw": 22415.0,
+      "annual_peak_mw": 22415.0
+    },
+    {
+      "year": 2023,
+      "summer_peak_mw": 22050.0,
+      "winter_peak_mw": 22152.0,
+      "annual_peak_mw": 22050.0
+    },
+    {
+      "year": 2024,
+      "summer_peak_mw": 23220.0,
+      "winter_peak_mw": 24957.0,
+      "annual_peak_mw": 23220.0
+    },
+    {
+      "year": 2025,
+      "summer_peak_mw": 23905.0,
+      "winter_peak_mw": 25413.0,
+      "annual_peak_mw": 24957.0
+    },
+    {
+      "year": 2026,
+      "summer_peak_mw": 25384.0,
+      "winter_peak_mw": null,
+      "annual_peak_mw": 25413.0
+    }
+  ],
+  "scenarios": {
+    "low": {
+      "label": "Low (2.5%/yr, Dominion IRP)",
+      "load": {
+        "growth": 0.025,
+        "increment_mw": 3384.0,
+        "peak_median_mw": 29135.0,
+        "peak_p90_mw": 29767.0,
+        "energy_twh": 168.15
+      },
+      "optimized": {
+        "new_capacity_mw": {
+          "gas_cc": 0.0,
+          "gas_ct": 0.0,
+          "solar": 0.0,
+          "battery_4h": 0.0,
+          "demand_response": 0.0
+        },
+        "annual_cost_musd": 4426.0,
+        "fixed_cost_musd": 0.0,
+        "variable_cost_musd": 4426.0,
+        "energy_twh": {
+          "existing_nuclear": 29.872,
+          "existing_gas": 115.662,
+          "existing_coal_oil_other": 8.393,
+          "gas_cc": 0.0,
+          "gas_ct": 0.0,
+          "imports": 2.568,
+          "demand_response": 0.0,
+          "solar": 11.224,
+          "battery_discharge": 0.0,
+          "unserved": 0.0
+        },
+        "demand_twh": 167.72,
+        "avg_cost_usd_per_mwh": 26.39,
+        "co2_mt": 56.85,
+        "co2_t_per_mwh": 0.339,
+        "reserve_shadow_price_usd_per_kw_yr": 0.0,
+        "gas_price": 3.5,
+        "carbon_price": 0,
+        "fpr": 0.9401,
+        "accredited_requirement_mw": 27390.0,
+        "allowed": [
+          "gas_cc",
+          "gas_ct",
+          "solar",
+          "battery_4h",
+          "demand_response"
+        ],
+        "reliability": {
+          "draws": 1000,
+          "lole_days_per_yr": 0.453,
+          "lolh_hours_per_yr": 1.39,
+          "eue_mwh_per_yr": 1255.0,
+          "p_any_shortfall": 0.328,
+          "meets_target": false
+        }
+      },
+      "gas_only": {
+        "new_capacity_mw": {
+          "gas_cc": 0.0,
+          "gas_ct": 0.0,
+          "solar": 0.0,
+          "battery_4h": 0.0,
+          "demand_response": 0.0
+        },
+        "annual_cost_musd": 4426.0,
+        "fixed_cost_musd": 0.0,
+        "variable_cost_musd": 4426.0,
+        "energy_twh": {
+          "existing_nuclear": 29.872,
+          "existing_gas": 115.662,
+          "existing_coal_oil_other": 8.393,
+          "gas_cc": 0.0,
+          "gas_ct": 0.0,
+          "imports": 2.568,
+          "demand_response": 0.0,
+          "solar": 11.224,
+          "battery_discharge": 0.0,
+          "unserved": 0.0
+        },
+        "demand_twh": 167.72,
+        "avg_cost_usd_per_mwh": 26.39,
+        "co2_mt": 56.85,
+        "co2_t_per_mwh": 0.339,
+        "reserve_shadow_price_usd_per_kw_yr": 0.0,
+        "gas_price": 3.5,
+        "carbon_price": 0,
+        "fpr": 0.9401,
+        "accredited_requirement_mw": 27390.0,
+        "allowed": [
+          "gas_cc",
+          "gas_ct"
+        ],
+        "reliability": {
+          "draws": 1000,
+          "lole_days_per_yr": 0.453,
+          "lolh_hours_per_yr": 1.39,
+          "eue_mwh_per_yr": 1255.0,
+          "p_any_shortfall": 0.328,
+          "meets_target": false
+        }
+      },
+      "savings_vs_gas_only_pct": 0.0
+    },
+    "base": {
+      "label": "Base (4.7%/yr, PJM 2026 winter)",
+      "load": {
+        "growth": 0.047,
+        "increment_mw": 6648.0,
+        "peak_median_mw": 32399.0,
+        "peak_p90_mw": 33031.0,
+        "energy_twh": 196.74
+      },
+      "optimized": {
+        "new_capacity_mw": {
+          "gas_cc": 3035.7,
+          "gas_ct": 0.0,
+          "solar": 0.0,
+          "battery_4h": 0.0,
+          "demand_response": 443.4
+        },
+        "annual_cost_musd": 5780.5,
+        "fixed_cost_musd": 637.6,
+        "variable_cost_musd": 5142.9,
+        "energy_twh": {
+          "existing_nuclear": 29.872,
+          "existing_gas": 116.565,
+          "existing_coal_oil_other": 8.8,
+          "gas_cc": 26.593,
+          "gas_ct": 0.0,
+          "imports": 2.646,
+          "demand_response": 0.0,
+          "solar": 11.401,
+          "battery_discharge": 0.0,
+          "unserved": 0.0
+        },
+        "demand_twh": 195.88,
+        "avg_cost_usd_per_mwh": 29.51,
+        "co2_mt": 66.68,
+        "co2_t_per_mwh": 0.34,
+        "reserve_shadow_price_usd_per_kw_yr": 58.48,
+        "gas_price": 3.5,
+        "carbon_price": 0,
+        "fpr": 0.9401,
+        "accredited_requirement_mw": 30458.0,
+        "allowed": [
+          "gas_cc",
+          "gas_ct",
+          "solar",
+          "battery_4h",
+          "demand_response"
+        ],
+        "reliability": {
+          "draws": 1000,
+          "lole_days_per_yr": 0.512,
+          "lolh_hours_per_yr": 1.67,
+          "eue_mwh_per_yr": 1684.0,
+          "p_any_shortfall": 0.347,
+          "meets_target": false
+        }
+      },
+      "gas_only": {
+        "new_capacity_mw": {
+          "gas_cc": 3552.9,
+          "gas_ct": 0.0,
+          "solar": 0.0,
+          "battery_4h": 0.0,
+          "demand_response": 0.0
+        },
+        "annual_cost_musd": 5784.8,
+        "fixed_cost_musd": 715.1,
+        "variable_cost_musd": 5069.7,
+        "energy_twh": {
+          "existing_nuclear": 29.872,
+          "existing_gas": 114.319,
+          "existing_coal_oil_other": 7.23,
+          "gas_cc": 31.124,
+          "gas_ct": 0.0,
+          "imports": 1.931,
+          "demand_response": 0.0,
+          "solar": 11.401,
+          "battery_discharge": 0.0,
+          "unserved": 0.0
+        },
+        "demand_twh": 195.88,
+        "avg_cost_usd_per_mwh": 29.53,
+        "co2_mt": 65.53,
+        "co2_t_per_mwh": 0.335,
+        "reserve_shadow_price_usd_per_kw_yr": 79.2,
+        "gas_price": 3.5,
+        "carbon_price": 0,
+        "fpr": 0.9401,
+        "accredited_requirement_mw": 30458.0,
+        "allowed": [
+          "gas_cc",
+          "gas_ct"
+        ],
+        "reliability": {
+          "draws": 1000,
+          "lole_days_per_yr": 0.507,
+          "lolh_hours_per_yr": 1.67,
+          "eue_mwh_per_yr": 1682.0,
+          "p_any_shortfall": 0.342,
+          "meets_target": false
+        }
+      },
+      "savings_vs_gas_only_pct": 0.1
+    },
+    "high": {
+      "label": "High (6.5%/yr)",
+      "load": {
+        "growth": 0.065,
+        "increment_mw": 9530.0,
+        "peak_median_mw": 35281.0,
+        "peak_p90_mw": 35913.0,
+        "energy_twh": 221.99
+      },
+      "optimized": {
+        "new_capacity_mw": {
+          "gas_cc": 5971.1,
+          "gas_ct": 0.0,
+          "solar": 0.0,
+          "battery_4h": 0.0,
+          "demand_response": 904.6
+        },
+        "annual_cost_musd": 7057.2,
+        "fixed_cost_musd": 1256.1,
+        "variable_cost_musd": 5801.1,
+        "energy_twh": {
+          "existing_nuclear": 29.872,
+          "existing_gas": 116.427,
+          "existing_coal_oil_other": 8.817,
+          "gas_cc": 52.307,
+          "gas_ct": 0.0,
+          "imports": 2.92,
+          "demand_response": 0.001,
+          "solar": 11.172,
+          "battery_discharge": 0.0,
+          "unserved": 0.0
+        },
+        "demand_twh": 221.51,
+        "avg_cost_usd_per_mwh": 31.86,
+        "co2_mt": 75.48,
+        "co2_t_per_mwh": 0.341,
+        "reserve_shadow_price_usd_per_kw_yr": 62.95,
+        "gas_price": 3.5,
+        "carbon_price": 0,
+        "fpr": 0.9401,
+        "accredited_requirement_mw": 33168.0,
+        "allowed": [
+          "gas_cc",
+          "gas_ct",
+          "solar",
+          "battery_4h",
+          "demand_response"
+        ],
+        "reliability": {
+          "draws": 1000,
+          "lole_days_per_yr": 0.484,
+          "lolh_hours_per_yr": 1.55,
+          "eue_mwh_per_yr": 1621.0,
+          "p_any_shortfall": 0.327,
+          "meets_target": false
+        }
+      },
+      "gas_only": {
+        "new_capacity_mw": {
+          "gas_cc": 7026.5,
+          "gas_ct": 0.0,
+          "solar": 0.0,
+          "battery_4h": 0.0,
+          "demand_response": 0.0
+        },
+        "annual_cost_musd": 7072.5,
+        "fixed_cost_musd": 1414.3,
+        "variable_cost_musd": 5658.2,
+        "energy_twh": {
+          "existing_nuclear": 29.872,
+          "existing_gas": 111.531,
+          "existing_coal_oil_other": 5.847,
+          "gas_cc": 61.552,
+          "gas_ct": 0.0,
+          "imports": 1.542,
+          "demand_response": 0.0,
+          "solar": 11.172,
+          "battery_discharge": 0.0,
+          "unserved": 0.0
+        },
+        "demand_twh": 221.51,
+        "avg_cost_usd_per_mwh": 31.93,
+        "co2_mt": 73.25,
+        "co2_t_per_mwh": 0.331,
+        "reserve_shadow_price_usd_per_kw_yr": 105.41,
+        "gas_price": 3.5,
+        "carbon_price": 0,
+        "fpr": 0.9401,
+        "accredited_requirement_mw": 33168.0,
+        "allowed": [
+          "gas_cc",
+          "gas_ct"
+        ],
+        "reliability": {
+          "draws": 1000,
+          "lole_days_per_yr": 0.47,
+          "lolh_hours_per_yr": 1.54,
+          "eue_mwh_per_yr": 1621.0,
+          "p_any_shortfall": 0.325,
+          "meets_target": false
+        }
+      },
+      "savings_vs_gas_only_pct": 0.2
+    }
+  },
+  "reserve_sweep": [
+    {
+      "fpr": 0.86,
+      "annual_cost_musd": 5726.3,
+      "new_mw_total": 1764.0,
+      "lole_days_per_yr": 1.63,
+      "eue_mwh_per_yr": 7062.0
+    },
+    {
+      "fpr": 0.88,
+      "annual_cost_musd": 5726.3,
+      "new_mw_total": 1764.0,
+      "lole_days_per_yr": 1.63,
+      "eue_mwh_per_yr": 7062.0
+    },
+    {
+      "fpr": 0.9,
+      "annual_cost_musd": 5726.8,
+      "new_mw_total": 1887.0,
+      "lole_days_per_yr": 1.497,
+      "eue_mwh_per_yr": 6420.0
+    },
+    {
+      "fpr": 0.92,
+      "annual_cost_musd": 5744.1,
+      "new_mw_total": 2718.0,
+      "lole_days_per_yr": 0.845,
+      "eue_mwh_per_yr": 3349.0
+    },
+    {
+      "fpr": 0.94,
+      "annual_cost_musd": 5780.3,
+      "new_mw_total": 3476.0,
+      "lole_days_per_yr": 0.512,
+      "eue_mwh_per_yr": 1690.0
+    },
+    {
+      "fpr": 0.96,
+      "annual_cost_musd": 5820.0,
+      "new_mw_total": 4177.0,
+      "lole_days_per_yr": 0.316,
+      "eue_mwh_per_yr": 789.0
+    },
+    {
+      "fpr": 0.98,
+      "annual_cost_musd": 5862.7,
+      "new_mw_total": 4889.0,
+      "lole_days_per_yr": 0.188,
+      "eue_mwh_per_yr": 331.0
+    },
+    {
+      "fpr": 1.0,
+      "annual_cost_musd": 5905.7,
+      "new_mw_total": 5624.0,
+      "lole_days_per_yr": 0.097,
+      "eue_mwh_per_yr": 117.0
+    }
+  ],
+  "reliability_sensitivity": [
+    {
+      "case": "Baseline assumptions",
+      "lole_days_per_yr": 0.512,
+      "eue_mwh_per_yr": 1684.0,
+      "meets_target": false
+    },
+    {
+      "case": "No cold-weather outages",
+      "lole_days_per_yr": 0.09,
+      "eue_mwh_per_yr": 101.0,
+      "meets_target": true
+    },
+    {
+      "case": "Cold-weather effect halved",
+      "lole_days_per_yr": 0.246,
+      "eue_mwh_per_yr": 440.0,
+      "meets_target": false
+    },
+    {
+      "case": "Imports 100% deliverable",
+      "lole_days_per_yr": 0.323,
+      "eue_mwh_per_yr": 850.0,
+      "meets_target": false
+    },
+    {
+      "case": "Existing outage rate 4% (vs 6%)",
+      "lole_days_per_yr": 0.336,
+      "eue_mwh_per_yr": 920.0,
+      "meets_target": false
+    }
+  ],
+  "runtime_s": 81.7
+}

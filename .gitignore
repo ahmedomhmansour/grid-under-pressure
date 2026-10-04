@@ -1,0 +1,22 @@
+# secrets
+.env
+.streamlit/secrets.toml
+
+# raw + processed data are re-downloadable; outputs/ IS committed so the app can deploy
+data/raw/*.parquet
+data/processed/*.parquet
+
+# python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
